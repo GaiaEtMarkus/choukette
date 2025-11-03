@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-cream-200 text-chocolate-800 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-neutral-50 text-primary-600 font-medium px-6 py-3 rounded-lg border border-primary-200 transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent hover:bg-primary-50 text-primary-600 font-medium px-6 py-3 rounded-lg border-2 border-primary-300 hover:border-primary-400 transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-neutral-200 p-6;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-lg hover:border-primary-200 transition-all duration-300 cursor-pointer;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full;
+  }
+  
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+  
+  .badge-warning {
+    @apply badge bg-accent-100 text-accent-800;
+  }
+  
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-800;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+  }
+  
+  .container-section {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
+  
+  .bg-hero {
+    @apply bg-gradient-to-br from-cream-100 via-cream-50 to-primary-100;
+    position: relative;
+  }
+  
+  .bg-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      /* Points avec opacité maximale */
+      radial-gradient(circle, rgba(139, 90, 60, 0.3) 1.5px, transparent 1.5px),
+      /* Points secondaires */
+      radial-gradient(circle, rgba(242, 164, 68, 0.25) 1px, transparent 1px),
+      /* Points fins */
+      radial-gradient(circle, rgba(139, 90, 60, 0.15) 0.5px, transparent 0.5px);
+    background-size: 30px 30px, 20px 20px, 12px 12px;
+    background-position: 0 0, 15px 15px, 8px 8px;
+    
+    /* Masque qui rend les points invisibles aux bords et visibles au centre */
+    mask: radial-gradient(ellipse 70% 50% at center, 
+      black 0%,           /* Centre : opacité 100% */
+      black 30%,          /* Zone centrale élargie : 100% */
+      rgba(0,0,0,0.8) 50%, /* Diminution plus douce */
+      rgba(0,0,0,0.5) 70%, /* Transition plus longue */
+      rgba(0,0,0,0.2) 85%, /* Encore un peu visible */
+      transparent 100%     /* Bords : complètement invisible */
+    );
+    -webkit-mask: radial-gradient(ellipse 70% 50% at center, 
+      black 0%, 
+      black 30%, 
+      rgba(0,0,0,0.8) 50%, 
+      rgba(0,0,0,0.5) 70%, 
+      rgba(0,0,0,0.2) 85%, 
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* S'assurer que le contenu de la hero section est au-dessus du pattern */
+  .bg-hero > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .bg-pattern-dots {
+    background-image: 
+      /* Points principaux plus visibles au centre */
+      radial-gradient(circle, rgba(139, 90, 60, 0.2) 2px, transparent 2px),
+      /* Points secondaires */
+      radial-gradient(circle at 50% 50%, rgba(242, 164, 68, 0.15) 1.5px, transparent 1.5px),
+      /* Masque radial pour estomper vers les bords */
+      radial-gradient(ellipse at center, transparent 30%, rgba(250, 238, 224, 0.3) 70%, rgba(250, 238, 224, 0.7) 100%);
+    background-size: 25px 25px, 12px 12px, 100% 100%;
+    background-position: 0 0, 12px 12px, center;
+  }
+  
+  .bg-pattern-grain {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(242, 164, 68, 0.1) 2px, transparent 2px),
+      radial-gradient(circle at 40% 20%, rgba(139, 90, 60, 0.08) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.06) 1px, transparent 1px),
+      linear-gradient(120deg, transparent 40%, rgba(139, 90, 60, 0.02) 40%, rgba(139, 90, 60, 0.02) 60%, transparent 60%);
+    background-size: 40px 40px, 25px 25px, 35px 35px, 80px 80px;
+  }
+  
+  .bg-pattern-subtle {
+    background-image: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 8px,
+        rgba(139, 90, 60, 0.04) 8px,
+        rgba(139, 90, 60, 0.04) 16px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 12px,
+        rgba(242, 164, 68, 0.03) 12px,
+        rgba(242, 164, 68, 0.03) 24px
+      );
+  }
+  
+  .bg-pattern-wave {
+    background-image: 
+      radial-gradient(ellipse 150px 50px at 50% 0%, rgba(242, 164, 68, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 100px 40px at 20% 100%, rgba(139, 90, 60, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 120px 30px at 80% 60%, rgba(249, 115, 22, 0.04) 0%, transparent 50%);
+    background-size: 300px 150px, 200px 100px, 250px 120px;
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  
+  /* Éléments décoratifs pour l'ambiance boulangerie */
+  .decoration-wheat:nth-child(odd)::before {
+    content: "🌾";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.5rem;
+    opacity: 0.06;
+    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .decoration-bread:nth-child(even)::after {
+    content: "🥖";
+    position: absolute;
+    bottom: -15px;
+    left: -15px;
+    font-size: 1.2rem;
+    opacity: 0.05;
+    pointer-events: none;
+    animation: float 4s ease-in-out infinite reverse;
+  }
+  
+  /* Animation flottante */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+  
+  /* Effet de brillance subtile pour les cards */
+  .card-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(242, 164, 68, 0.15), transparent);
+    transition: left 0.5s;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .card-hover:hover::before {
+    left: 100%;
+  }
+  
+  /* Pattern de points concentrés au centre */
+  .bg-pattern-center-dots {
+    background-image: 
+      /* Points grands au centre */
+      radial-gradient(circle, rgba(139, 90, 60, 0.25) 3px, transparent 3px),
+      /* Points moyens décalés */
+      radial-gradient(circle, rgba(242, 164, 68, 0.2) 2px, transparent 2px),
+      /* Points petits pour la texture */
+      radial-gradient(circle, rgba(139, 90, 60, 0.1) 1px, transparent 1px),
+      /* Masque de vignette pour concentrer au centre */
+      radial-gradient(ellipse 80% 60% at center, transparent 0%, transparent 40%, rgba(250, 238, 224, 0.4) 70%, rgba(250, 238, 224, 0.8) 100%);
+    background-size: 40px 40px, 25px 25px, 15px 15px, 100% 100%;
+    background-position: 0 0, 20px 20px, 10px 10px, center;
+  }
+}

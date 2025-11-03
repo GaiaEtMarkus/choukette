@@ -1,0 +1,69 @@
+# CHOUKETTE - Prototype de Présentation
+# Plateforme de mise en relation boulangeries/professionnels
+
+## 🎯 TODOLIST PROTOTYPE - Pour Démonstration
+
+### 🚨 PRIORITÉ 1 - ARCHITECTURE & TECHNIQUE
+- [ ] Configurer Vue Router avec toutes les routes nécessaires
+- [ ] Créer des données mock complètes (boulangeries, professionnels, missions)
+- [ ] Composants UI réutilisables (cards, modals, formulaires, badges)
+
+### 📱 PRIORITÉ 2 - PAGES CORE UTILISATEURS
+- [ ] Page recherche missions avec filtres avancés (poste, lieu, tarif, urgence)
+- [ ] Page détail mission avec candidature et infos complètes
+- [ ] Page listing professionnels avec filtres (spécialité, certification, note)
+- [ ] Profil professionnel détaillé avec portfolio, certifications, évaluations
+- [ ] Profil boulangerie avec infos établissement et missions postées
+- [ ] Pages connexion/inscription avec choix type utilisateur
+
+### 🏪 PRIORITÉ 3 - DASHBOARDS & GESTION
+- [ ] Dashboard boulangerie : gestion missions, candidatures reçues, planning
+- [ ] Dashboard professionnel : candidatures, missions, calendrier, CA
+- [ ] Système badges de certification avec niveaux (base, spécialisé, expérience)
+- [ ] Système d'évaluation mutuel avec critères détaillés (5 étoiles + commentaires)
+
+### ✨ PRIORITÉ 4 - FONCTIONNALITÉS AVANCÉES
+- [ ] Messagerie intégrée entre boulangeries et professionnels
+- [ ] Gestion calendrier et disponibilités avec synchro Google Calendar
+- [ ] Mode 'SOS Urgence' avec notifications prioritaires et tarifs majorés
+- [ ] Géolocalisation avec calcul distances et temps de trajet
+- [ ] Système de suggestions automatiques basé sur historique et proximité
+- [ ] Simulation contrats auto-entrepreneur vs intérim avec templates
+
+### 🌟 PRIORITÉ 5 - EXPÉRIENCE UTILISATEUR
+- [ ] Galerie portfolio photos des créations professionnelles
+- [ ] Filtres de recherche avancés avec sauvegarde des préférences
+- [ ] Système notifications en temps réel (nouvelles missions, candidatures)
+- [ ] Fonctionnalités communautaires (forum, partage recettes, conseils)
+- [ ] Système gamification avec points, défis et classements
+
+### 🎯 PRIORITÉ 6 - ADMIN & ANALYTICS
+- [ ] Interface modération pour validation profils et résolution litiges
+- [ ] Tableaux de bord analytics avec KPI (missions, satisfaction, CA)
+
+### 🎨 PRIORITÉ 7 - FINITIONS & PRÉSENTATION
+- [ ] Optimisation mobile complète avec navigation tactile
+- [ ] États de chargement et animations fluides pour l'effet professionnel
+- [ ] Scénario de démonstration complet avec flow utilisateur type
+- [ ] Données de démo réalistes et attractives pour impressionner
+- [ ] Peaufinage final interface pour l'effet 'wow' en présentation
+
+## 🎬 OBJECTIF
+Créer une démo qui donne l'impression d'une vraie application fonctionnelle 
+pour impressionner les investisseurs/clients potentiels, tout en gardant 
+la simplicité d'un prototype avec des mocks.
+
+## 🛠️ STACK TECHNIQUE
+- Vue.js 3 + Composition API
+- TypeScript
+- Tailwind CSS + design system personnalisé
+- Pinia pour le state management
+- Vue Router
+- Données mockées (localStorage)
+- Design responsive mobile-first
+
+## 🎨 DESIGN SYSTEM
+- Couleurs inspirées du logo Choukette (orange doré, brun chocolat, crème)
+- Typographie: Inter (corps) + Playfair Display (titres)
+- Patterns de fond subtils sur la hero section
+- Animations douces et professionnelles
