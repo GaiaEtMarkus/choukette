@@ -9,7 +9,7 @@ export interface Professional {
   specialties: string[]
   domains: string[] // e.g., Viennoiserie, Pâtisserie fine, Pains spéciaux
   yearsExperience: number
-  location: { city: string; postalCode: string }
+  location: { city: string; postalCode: string; address?: string }
   hourlyRate: number
   missionsCompleted: number
   isPremium: boolean
@@ -23,6 +23,22 @@ export interface Professional {
     period: string
     city: string
   }>
+  // Données admin
+  email?: string
+  phone?: string
+  siret?: string // Si auto-entrepreneur
+  status?: 'auto-entrepreneur' | 'interim' | 'salarie'
+  verificationStatus?: 'pending' | 'verified' | 'rejected' | 'suspended'
+  verificationDocuments?: Array<{
+    type: 'identity' | 'diploma' | 'siret' | 'rib' | 'other'
+    url: string
+    uploadedAt: string
+    verified: boolean
+    diplomaType?: string // CAP, BP, etc.
+    diplomaYear?: number
+  }>
+  notes?: string // Notes internes admin
+  suspendedUntil?: string // Date de fin de suspension
 }
 
 // Fonction pour sélectionner un avatar aléatoire
@@ -46,18 +62,31 @@ export const useProfessionalsStore = defineStore('professionals', () => {
         specialties: ['Pains de tradition française', 'Levain naturel'],
         domains: ['Pain et viennoiserie', 'Fournil traditionnel'],
         yearsExperience: 10,
-        location: { city: 'Paris', postalCode: '75011' },
+        location: { city: 'Paris', postalCode: '75011', address: '45 Rue de la République, 75011 Paris' },
         hourlyRate: 29,
         missionsCompleted: 140,
         isPremium: true,
-        bio: 'Boulanger spécialisé levain et farines anciennes, avec une approche très technique des fermentations lentes (pétrissages doux, pointage cuve/bac, apprêts contrôlés). Je pilote des productions quotidiennes importantes en garantissant une signature aromatique claire, une mie alvéolée et une croûte chantante. Sens aigu de l’organisation: plan de four, rotations en boutique, suivi des stocks et des fiches techniques. Habitué aux audits hygiène, je documente mes paramètres (températures, hydratations) et j’accompagne les équipes dans la montée en compétences. J’ai à cœur de transmettre une méthode de travail claire et reproductible pour que l’exigence reste compatible avec la cadence. J’ai mené plusieurs chantiers d’amélioration continue (réduction des pertes, standardisation des protocoles) avec impact direct sur la qualité et la marge.',
+        bio: 'Boulanger spécialisé levain et farines anciennes, avec une approche très technique des fermentations lentes (pétrissages doux, pointage cuve/bac, apprêts contrôlés). Je pilote des productions quotidiennes importantes en garantissant une signature aromatique claire, une mie alvéolée et une croûte chantante. Sens aigu de l\'organisation: plan de four, rotations en boutique, suivi des stocks et des fiches techniques. Habitué aux audits hygiène, je documente mes paramètres (températures, hydratations) et j\'accompagne les équipes dans la montée en compétences. J\'ai à cœur de transmettre une méthode de travail claire et reproductible pour que l\'exigence reste compatible avec la cadence. J\'ai mené plusieurs chantiers d\'amélioration continue (réduction des pertes, standardisation des protocoles) avec impact direct sur la qualité et la marge.',
         certifications: ['CAP Boulanger', 'BP Boulanger'],
         experiences: [
           { bakeryName: 'Boulangerie du Canal', role: 'Chef de fournil', period: '2022–2024', city: 'Paris' },
           { bakeryName: 'Le Grenier Bio', role: 'Boulanger', period: '2019–2022', city: 'Montreuil' },
           { bakeryName: 'Maison Martin', role: 'Second de fournil', period: '2016–2019', city: 'Paris' }
         ],
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        email: 'camille.moreau@example.fr',
+        phone: '+33 6 12 34 56 78',
+        siret: '12345678901234',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified',
+        verificationDocuments: [
+          { type: 'identity', url: '/documents/cni_camille_moreau.pdf', uploadedAt: '2020-01-15', verified: true },
+          { type: 'diploma', url: '/documents/cap_boulanger_camille.pdf', uploadedAt: '2020-01-15', verified: true, diplomaType: 'CAP Boulanger', diplomaYear: 2014 },
+          { type: 'diploma', url: '/documents/bp_boulanger_camille.pdf', uploadedAt: '2020-01-15', verified: true, diplomaType: 'BP Boulanger', diplomaYear: 2016 },
+          { type: 'siret', url: '/documents/siret_camille.pdf', uploadedAt: '2020-01-15', verified: true },
+          { type: 'rib', url: '/documents/rib_camille.pdf', uploadedAt: '2020-01-15', verified: true }
+        ],
+        notes: 'Excellent professionnel, très apprécié par les boulangeries. Tous les documents vérifiés.'
       },
       {
         id: 'pro2',
@@ -67,18 +96,30 @@ export const useProfessionalsStore = defineStore('professionals', () => {
         specialties: ['Entremets modernes', 'Glaçage miroir', 'Dressages'],
         domains: ['Pâtisserie fine'],
         yearsExperience: 8,
-        location: { city: 'Paris', postalCode: '75007' },
+        location: { city: 'Paris', postalCode: '75007', address: '12 Rue de Varenne, 75007 Paris' },
         hourlyRate: 34,
         missionsCompleted: 96,
         isPremium: true,
-        bio: 'Pâtissier boutique et restaurant, orienté entremets modernes, tartes fines et dressages minute. Maîtrise des textures (mousses, croustillants, inserts calibrés), des courbes de température et des finitions (glaçage miroir tendu, velours homogène). Créatif mais rigoureux, je construis des cartes saisonnières optimisées en coût matière, je standardise les process et je forme les équipes sur les points critiques (hygiène, congélation/décongélation, tenue au transport). Habitué aux délais courts pour événements et hôtels, avec un niveau de finition constant. Mise en place de fiches techniques chiffrées et d’un contrôle qualité à chaque étape.',
+        bio: 'Pâtissier boutique et restaurant, orienté entremets modernes, tartes fines et dressages minute. Maîtrise des textures (mousses, croustillants, inserts calibrés), des courbes de température et des finitions (glaçage miroir tendu, velours homogène). Créatif mais rigoureux, je construis des cartes saisonnières optimisées en coût matière, je standardise les process et je forme les équipes sur les points critiques (hygiène, congélation/décongélation, tenue au transport). Habitué aux délais courts pour événements et hôtels, avec un niveau de finition constant. Mise en place de fiches techniques chiffrées et d\'un contrôle qualité à chaque étape.',
         certifications: ['CAP Pâtissier', 'BTM Pâtissier'],
         experiences: [
           { bakeryName: 'Salon Sucré', role: 'Chef pâtissier', period: '2021–2024', city: 'Paris' },
           { bakeryName: 'Éclats de Sucre', role: 'Pâtissier', period: '2018–2021', city: 'Boulogne' },
           { bakeryName: 'Hôtel Marceau', role: 'Chef de partie pâtisserie', period: '2016–2018', city: 'Paris' }
         ],
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        email: 'sofiane.leroux@example.fr',
+        phone: '+33 6 98 76 54 32',
+        siret: '98765432109876',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified',
+        verificationDocuments: [
+          { type: 'identity', url: '/documents/cni_sofiane_leroux.pdf', uploadedAt: '2019-03-10', verified: true },
+          { type: 'diploma', url: '/documents/cap_patissier_sofiane.pdf', uploadedAt: '2019-03-10', verified: true, diplomaType: 'CAP Pâtissier', diplomaYear: 2016 },
+          { type: 'diploma', url: '/documents/btm_patissier_sofiane.pdf', uploadedAt: '2019-03-10', verified: true, diplomaType: 'BTM Pâtissier', diplomaYear: 2018 },
+          { type: 'siret', url: '/documents/siret_sofiane.pdf', uploadedAt: '2019-03-10', verified: true }
+        ],
+        notes: 'Pâtissier talentueux, très créatif. Documents complets et vérifiés.'
       },
       {
         id: 'pro3',
@@ -445,6 +486,489 @@ export const useProfessionalsStore = defineStore('professionals', () => {
           { bakeryName: 'Maison Delacroix', role: 'Boulanger', period: '2014–2017', city: 'Paris' }
         ],
         createdAt: new Date().toISOString()
+      },
+      // Professionnels supplémentaires (20+)
+      {
+        id: 'pro21',
+        firstName: 'Raphaël',
+        lastName: 'Garnier',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie tradition', 'Viennoiserie'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 6,
+        location: { city: 'Paris', postalCode: '75013' },
+        hourlyRate: 28,
+        missionsCompleted: 65,
+        isPremium: false,
+        bio: 'Boulanger traditionnel, rigoureux sur les process et la qualité. Je maîtrise les fermentations longues et les techniques artisanales.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'La Tradition', role: 'Boulanger', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'raphael.garnier@example.fr',
+        phone: '+33 6 11 22 33 44',
+        siret: '11122233344455',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified',
+        verificationDocuments: [
+          { type: 'identity', url: '/documents/cni_raphael.pdf', uploadedAt: '2020-01-10', verified: true },
+          { type: 'diploma', url: '/documents/cap_raphael.pdf', uploadedAt: '2020-01-10', verified: true, diplomaType: 'CAP Boulanger', diplomaYear: 2018 }
+        ]
+      },
+      {
+        id: 'pro22',
+        firstName: 'Maxime',
+        lastName: 'Lemaire',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Entremets'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 5,
+        location: { city: 'Paris', postalCode: '75010' },
+        hourlyRate: 30,
+        missionsCompleted: 48,
+        isPremium: false,
+        bio: 'Pâtissier créatif, spécialisé en entremets et desserts modernes. Je maîtrise les textures et les finitions haut de gamme.',
+        certifications: ['CAP Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie Fine', role: 'Pâtissier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'maxime.lemaire@example.fr',
+        phone: '+33 6 22 33 44 55',
+        siret: '22233344455566',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified',
+        verificationDocuments: [
+          { type: 'identity', url: '/documents/cni_maxime.pdf', uploadedAt: '2021-01-15', verified: true }
+        ]
+      },
+      {
+        id: 'pro23',
+        firstName: 'Alexandre',
+        lastName: 'Roux',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Tourage', 'Viennoiserie'],
+        domains: ['Tournier/Tourier'],
+        yearsExperience: 4,
+        location: { city: 'Paris', postalCode: '75018' },
+        hourlyRate: 26,
+        missionsCompleted: 42,
+        isPremium: false,
+        bio: 'Tourier spécialisé en viennoiserie pur beurre. Je maîtrise les tours et la manipulation des pâtes feuilletées.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'La Croûte Dorée', role: 'Tourier', period: '2022–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'alexandre.roux@example.fr',
+        phone: '+33 6 33 44 55 66',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'pending'
+      },
+      {
+        id: 'pro24',
+        firstName: 'Nicolas',
+        lastName: 'Blanc',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Levain'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 8,
+        location: { city: 'Paris', postalCode: '75012' },
+        hourlyRate: 31,
+        missionsCompleted: 95,
+        isPremium: true,
+        bio: 'Boulanger spécialisé en levain naturel et farines anciennes. Je maîtrise les fermentations longues et les techniques artisanales.',
+        certifications: ['CAP Boulanger', 'BP Boulanger'],
+        experiences: [
+          { bakeryName: 'Le Fournil Artisanal', role: 'Chef de fournil', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'nicolas.blanc@example.fr',
+        phone: '+33 6 44 55 66 77',
+        siret: '33344455566677',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified',
+        verificationDocuments: [
+          { type: 'identity', url: '/documents/cni_nicolas.pdf', uploadedAt: '2020-01-20', verified: true },
+          { type: 'diploma', url: '/documents/cap_nicolas.pdf', uploadedAt: '2020-01-20', verified: true, diplomaType: 'CAP Boulanger', diplomaYear: 2016 }
+        ]
+      },
+      {
+        id: 'pro25',
+        firstName: 'Baptiste',
+        lastName: 'Moreau',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Glaçage'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 7,
+        location: { city: 'Paris', postalCode: '75014' },
+        hourlyRate: 32,
+        missionsCompleted: 78,
+        isPremium: true,
+        bio: 'Pâtissier expert en glaçage miroir et finitions haut de gamme. Je maîtrise les techniques modernes de pâtisserie.',
+        certifications: ['CAP Pâtissier', 'BTM Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie Royale', role: 'Chef pâtissier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'baptiste.moreau@example.fr',
+        phone: '+33 6 55 66 77 88',
+        siret: '44455566677788',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro26',
+        firstName: 'Théo',
+        lastName: 'Garcia',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Viennoiserie', 'Brioches'],
+        domains: ['Tournier/Tourier'],
+        yearsExperience: 5,
+        location: { city: 'Paris', postalCode: '75016' },
+        hourlyRate: 27,
+        missionsCompleted: 55,
+        isPremium: false,
+        bio: 'Tourier spécialisé en brioches et viennoiserie. Je maîtrise les techniques de pousse et de cuisson.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Boulangerie du Quartier', role: 'Tourier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'theo.garcia@example.fr',
+        phone: '+33 6 66 77 88 99',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro27',
+        firstName: 'Julien',
+        lastName: 'Petit',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie bio', 'Farines anciennes'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 9,
+        location: { city: 'Paris', postalCode: '75019' },
+        hourlyRate: 30,
+        missionsCompleted: 88,
+        isPremium: true,
+        bio: 'Boulanger bio spécialisé en farines anciennes et techniques artisanales. Je maîtrise les fermentations longues.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Boulangerie Bio', role: 'Boulanger', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'julien.petit@example.fr',
+        phone: '+33 6 77 88 99 00',
+        siret: '55566677788899',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro28',
+        firstName: 'Adrien',
+        lastName: 'Martinez',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Entremets'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 6,
+        location: { city: 'Paris', postalCode: '75020' },
+        hourlyRate: 29,
+        missionsCompleted: 62,
+        isPremium: false,
+        bio: 'Pâtissier créatif, spécialisé en entremets et desserts modernes. Je maîtrise les textures et les finitions.',
+        certifications: ['CAP Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie des Rêves', role: 'Pâtissier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'adrien.martinez@example.fr',
+        phone: '+33 6 88 99 00 11',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro29',
+        firstName: 'Florian',
+        lastName: 'Simon',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Tradition'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 7,
+        location: { city: 'Paris', postalCode: '75015' },
+        hourlyRate: 29,
+        missionsCompleted: 75,
+        isPremium: false,
+        bio: 'Boulanger traditionnel, rigoureux sur les process et la qualité. Je maîtrise les techniques artisanales.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'La Maison du Pain', role: 'Boulanger', period: '2020–2024', city: 'Boulogne' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'florian.simon@example.fr',
+        phone: '+33 6 99 00 11 22',
+        siret: '66677788899900',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro30',
+        firstName: 'Quentin',
+        lastName: 'Michel',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Tourage', 'Feuilletage'],
+        domains: ['Tournier/Tourier'],
+        yearsExperience: 5,
+        location: { city: 'Paris', postalCode: '75017' },
+        hourlyRate: 28,
+        missionsCompleted: 58,
+        isPremium: false,
+        bio: 'Tourier spécialisé en feuilletage pur beurre. Je maîtrise les tours et la manipulation des pâtes.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Le Four à Bois', role: 'Tourier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'quentin.michel@example.fr',
+        phone: '+33 6 00 11 22 33',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro31',
+        firstName: 'Matthieu',
+        lastName: 'Laurent',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Gâteaux'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 8,
+        location: { city: 'Paris', postalCode: '75011' },
+        hourlyRate: 33,
+        missionsCompleted: 92,
+        isPremium: true,
+        bio: 'Pâtissier expert en gâteaux et desserts classiques. Je maîtrise les techniques traditionnelles et modernes.',
+        certifications: ['CAP Pâtissier', 'BTM Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie Élégante', role: 'Chef pâtissier', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'matthieu.laurent@example.fr',
+        phone: '+33 6 11 22 33 44',
+        siret: '77788899900011',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro32',
+        firstName: 'Fabien',
+        lastName: 'Philippe',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Viennoiserie'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 6,
+        location: { city: 'Paris', postalCode: '75013' },
+        hourlyRate: 28,
+        missionsCompleted: 68,
+        isPremium: false,
+        bio: 'Boulanger polyvalent, spécialisé en pains et viennoiserie. Je maîtrise les techniques artisanales.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Boulangerie du Matin', role: 'Boulanger', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'fabien.philippe@example.fr',
+        phone: '+33 6 22 33 44 55',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro33',
+        firstName: 'Romain',
+        lastName: 'Bernard',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Tartes'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 5,
+        location: { city: 'Paris', postalCode: '75008' },
+        hourlyRate: 30,
+        missionsCompleted: 52,
+        isPremium: false,
+        bio: 'Pâtissier spécialisé en tartes et desserts classiques. Je maîtrise les techniques de fonçage et de cuisson.',
+        certifications: ['CAP Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie du Bonheur', role: 'Pâtissier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'romain.bernard@example.fr',
+        phone: '+33 6 33 44 55 66',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro34',
+        firstName: 'Sébastien',
+        lastName: 'Robin',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Levain'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 10,
+        location: { city: 'Paris', postalCode: '75012' },
+        hourlyRate: 32,
+        missionsCompleted: 110,
+        isPremium: true,
+        bio: 'Boulanger senior spécialisé en levain naturel. Je maîtrise les fermentations longues et les techniques artisanales.',
+        certifications: ['CAP Boulanger', 'BP Boulanger'],
+        experiences: [
+          { bakeryName: 'Le Pain Rustique', role: 'Chef de fournil', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'sebastien.robin@example.fr',
+        phone: '+33 6 44 55 66 77',
+        siret: '88899900011122',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro35',
+        firstName: 'Vincent',
+        lastName: 'Henry',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Tourage', 'Croissants'],
+        domains: ['Tournier/Tourier'],
+        yearsExperience: 4,
+        location: { city: 'Paris', postalCode: '75009' },
+        hourlyRate: 26,
+        missionsCompleted: 45,
+        isPremium: false,
+        bio: 'Tourier spécialisé en croissants et viennoiserie pur beurre. Je maîtrise les tours et la manipulation.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'La Pâte à Tartiner', role: 'Tourier', period: '2022–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'vincent.henry@example.fr',
+        phone: '+33 6 55 66 77 88',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'pending'
+      },
+      {
+        id: 'pro36',
+        firstName: 'Guillaume',
+        lastName: 'Rousseau',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Entremets'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 7,
+        location: { city: 'Paris', postalCode: '75007' },
+        hourlyRate: 31,
+        missionsCompleted: 82,
+        isPremium: true,
+        bio: 'Pâtissier expert en entremets et desserts modernes. Je maîtrise les textures et les finitions haut de gamme.',
+        certifications: ['CAP Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie Fine', role: 'Chef pâtissier', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'guillaume.rousseau@example.fr',
+        phone: '+33 6 66 77 88 99',
+        siret: '99900011122233',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro37',
+        firstName: 'Antoine',
+        lastName: 'David',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Tradition'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 6,
+        location: { city: 'Paris', postalCode: '75014' },
+        hourlyRate: 29,
+        missionsCompleted: 70,
+        isPremium: false,
+        bio: 'Boulanger traditionnel, rigoureux sur les process et la qualité. Je maîtrise les techniques artisanales.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Le Petit Four', role: 'Boulanger', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'antoine.david@example.fr',
+        phone: '+33 6 77 88 99 00',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro38',
+        firstName: 'Jérémy',
+        lastName: 'Bertrand',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Viennoiserie', 'Brioches'],
+        domains: ['Tournier/Tourier'],
+        yearsExperience: 5,
+        location: { city: 'Paris', postalCode: '75016' },
+        hourlyRate: 27,
+        missionsCompleted: 60,
+        isPremium: false,
+        bio: 'Tourier spécialisé en brioches et viennoiserie. Je maîtrise les techniques de pousse et de cuisson.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'La Mie Croustillante', role: 'Tourier', period: '2021–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'jeremy.bertrand@example.fr',
+        phone: '+33 6 88 99 00 11',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro39',
+        firstName: 'Damien',
+        lastName: 'Nguyen',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Pâtisserie', 'Glaçage'],
+        domains: ['Pâtisserie'],
+        yearsExperience: 8,
+        location: { city: 'Paris', postalCode: '75019' },
+        hourlyRate: 32,
+        missionsCompleted: 85,
+        isPremium: true,
+        bio: 'Pâtissier expert en glaçage miroir et finitions haut de gamme. Je maîtrise les techniques modernes.',
+        certifications: ['CAP Pâtissier'],
+        experiences: [
+          { bakeryName: 'Pâtisserie Royale', role: 'Chef pâtissier', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'damien.nguyen@example.fr',
+        phone: '+33 6 99 00 11 22',
+        siret: '00011122233344',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
+      },
+      {
+        id: 'pro40',
+        firstName: 'Kevin',
+        lastName: 'Girard',
+        avatar: getRandomProfessionalAvatar(),
+        specialties: ['Boulangerie', 'Levain'],
+        domains: ['Pain et viennoiserie'],
+        yearsExperience: 7,
+        location: { city: 'Paris', postalCode: '75020' },
+        hourlyRate: 30,
+        missionsCompleted: 75,
+        isPremium: false,
+        bio: 'Boulanger spécialisé en levain naturel et farines anciennes. Je maîtrise les fermentations longues.',
+        certifications: ['CAP Boulanger'],
+        experiences: [
+          { bakeryName: 'Le Pain de la Terre', role: 'Boulanger', period: '2020–2024', city: 'Paris' }
+        ],
+        createdAt: new Date().toISOString(),
+        email: 'kevin.girard@example.fr',
+        phone: '+33 6 00 11 22 33',
+        siret: '11122233344455',
+        status: 'auto-entrepreneur',
+        verificationStatus: 'verified'
       }
     ]
 

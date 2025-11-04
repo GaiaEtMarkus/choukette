@@ -127,83 +127,85 @@ const maxApplicationsReceived = computed(() =>
     <!-- Graphique 6 derniers mois -->
     <div class="card mb-8">
       <h2 class="text-xl font-semibold text-chocolate-800 mb-6">Évolution sur 6 mois</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <!-- Colonne 1 -->
         <div class="flex flex-col">
-          <div>
-            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Missions postées</h3>
-            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxMissionsPosted }}</span>
+          <div class="mb-4 md:mb-8">
+            <h3 class="text-sm font-medium text-chocolate-700 mb-1 md:mb-2">Missions postées</h3>
+            <span class="text-xs text-chocolate-500">max: {{ maxMissionsPosted }}</span>
           </div>
           <div class="relative flex-1">
             <!-- Zone graphique -->
-            <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
+            <div class="flex items-end gap-1 md:gap-2 pb-6 border-b border-chocolate-200 md:h-[180px] h-[140px] md:pl-8 pl-4">
               <template v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0">
                 <div 
                   v-for="(stat, idx) in bakeryStore.monthlyStats" 
                   :key="idx"
-                  class="flex-1 flex flex-col items-center gap-1 group relative"
+                  class="flex-1 flex flex-col items-center gap-0.5 md:gap-1 group relative min-w-0"
                 >
                   <div 
                     class="w-full bg-gradient-to-t from-primary-600 to-primary-400 rounded-t transition-all hover:from-primary-700 hover:to-primary-500 cursor-pointer shadow-sm hover:shadow-md"
                     :style="{ 
                       height: maxMissionsPosted > 0 
-                        ? `${Math.max((stat.missionsPosted / maxMissionsPosted) * 160, 20)}px` 
-                        : '20px',
-                      minHeight: '20px'
+                        ? `${Math.max((stat.missionsPosted / maxMissionsPosted) * 110, 16)}px` 
+                        : '16px',
+                      minHeight: '16px'
                     }"
+                    :class="{'md:h-auto': true}"
                     :title="`${stat.month}: ${stat.missionsPosted} missions`"
                   ></div>
-                  <span class="text-xs font-semibold text-chocolate-800 mt-1">{{ stat.missionsPosted }}</span>
-                  <span class="text-xs text-chocolate-600 text-center font-medium">{{ stat.month.split(' ')[0] }}</span>
-                  <span class="text-xs text-chocolate-500 text-center">{{ stat.month.split(' ')[1] }}</span>
+                  <span class="text-[10px] md:text-xs font-semibold text-chocolate-800 mt-0.5 md:mt-1 leading-tight">{{ stat.missionsPosted }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-600 text-center font-medium leading-tight">{{ stat.month.split(' ')[0] }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-500 text-center leading-tight hidden md:block">{{ stat.month.split(' ')[1] }}</span>
                 </div>
               </template>
               <p v-else class="text-sm text-chocolate-500 text-center w-full py-4">Chargement des données...</p>
             </div>
             <!-- Axe Y simplifié -->
-            <div v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-xs text-chocolate-400 pr-2">
+            <div v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] md:text-xs text-chocolate-400 pr-1 md:pr-2 md:pl-0 pl-1">
               <span>{{ maxMissionsPosted }}</span>
-              <span>{{ Math.round(maxMissionsPosted / 2) }}</span>
+              <span class="hidden md:inline">{{ Math.round(maxMissionsPosted / 2) }}</span>
               <span>0</span>
             </div>
           </div>
         </div>
         <!-- Colonne 2 -->
         <div class="flex flex-col">
-          <div>
-            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Candidatures reçues</h3>
-            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxApplicationsReceived }}</span>
+          <div class="mb-4 md:mb-8">
+            <h3 class="text-sm font-medium text-chocolate-700 mb-1 md:mb-2">Candidatures reçues</h3>
+            <span class="text-xs text-chocolate-500">max: {{ maxApplicationsReceived }}</span>
           </div>
           <div class="relative flex-1">
             <!-- Zone graphique -->
-            <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
+            <div class="flex items-end gap-1 md:gap-2 pb-6 border-b border-chocolate-200 md:h-[180px] h-[140px] md:pl-8 pl-4">
               <template v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0">
                 <div 
                   v-for="(stat, idx) in bakeryStore.monthlyStats" 
                   :key="idx"
-                  class="flex-1 flex flex-col items-center gap-1 group relative"
+                  class="flex-1 flex flex-col items-center gap-0.5 md:gap-1 group relative min-w-0"
                 >
                   <div 
                     class="w-full bg-gradient-to-t from-accent-600 to-accent-400 rounded-t transition-all hover:from-accent-700 hover:to-accent-500 cursor-pointer shadow-sm hover:shadow-md"
                     :style="{ 
                       height: maxApplicationsReceived > 0 
-                        ? `${Math.max((stat.applicationsReceived / maxApplicationsReceived) * 160, 20)}px` 
-                        : '20px',
-                      minHeight: '20px'
+                        ? `${Math.max((stat.applicationsReceived / maxApplicationsReceived) * 110, 16)}px` 
+                        : '16px',
+                      minHeight: '16px'
                     }"
+                    :class="{'md:h-auto': true}"
                     :title="`${stat.month}: ${stat.applicationsReceived} candidatures`"
                   ></div>
-                  <span class="text-xs font-semibold text-chocolate-800 mt-1">{{ stat.applicationsReceived }}</span>
-                  <span class="text-xs text-chocolate-600 text-center font-medium">{{ stat.month.split(' ')[0] }}</span>
-                  <span class="text-xs text-chocolate-500 text-center">{{ stat.month.split(' ')[1] }}</span>
+                  <span class="text-[10px] md:text-xs font-semibold text-chocolate-800 mt-0.5 md:mt-1 leading-tight">{{ stat.applicationsReceived }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-600 text-center font-medium leading-tight">{{ stat.month.split(' ')[0] }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-500 text-center leading-tight hidden md:block">{{ stat.month.split(' ')[1] }}</span>
                 </div>
               </template>
               <p v-else class="text-sm text-chocolate-500 text-center w-full py-4">Chargement des données...</p>
             </div>
             <!-- Axe Y simplifié -->
-            <div v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-xs text-chocolate-400 pr-2">
+            <div v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] md:text-xs text-chocolate-400 pr-1 md:pr-2 md:pl-0 pl-1">
               <span>{{ maxApplicationsReceived }}</span>
-              <span>{{ Math.round(maxApplicationsReceived / 2) }}</span>
+              <span class="hidden md:inline">{{ Math.round(maxApplicationsReceived / 2) }}</span>
               <span>0</span>
             </div>
           </div>

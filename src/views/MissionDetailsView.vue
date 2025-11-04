@@ -98,6 +98,34 @@ function goBack() {
                 <li v-if="mission.requirements.specialties.length">Spécialités: {{ mission.requirements.specialties.join(', ') }}</li>
               </ul>
             </div>
+
+            <!-- Avis de la boulangerie (si mission complétée) -->
+            <div v-if="mission.status === 'completed' && mission.bakeryReview" class="mt-6">
+              <h2 class="text-lg font-semibold text-chocolate-800 mb-4">Avis de la boulangerie</h2>
+              <div class="card bg-cream-50 border border-cream-200">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="flex items-center">
+                    <span 
+                      v-for="star in 5" 
+                      :key="star"
+                      class="text-2xl"
+                      :class="star <= mission.bakeryReview.rating ? 'text-yellow-500' : 'text-gray-300'"
+                    >
+                      ★
+                    </span>
+                  </div>
+                  <span class="text-sm text-chocolate-600 font-medium">
+                    {{ mission.bakeryReview.rating }}/5
+                  </span>
+                  <span class="text-xs text-chocolate-500 ml-auto">
+                    {{ new Date(mission.bakeryReview.reviewedAt).toLocaleDateString('fr-FR') }}
+                  </span>
+                </div>
+                <p v-if="mission.bakeryReview.comment" class="text-chocolate-700 leading-relaxed mt-2">
+                  {{ mission.bakeryReview.comment }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -106,7 +134,13 @@ function goBack() {
         <div class="card">
           <p class="text-sm text-chocolate-600">Localisation</p>
           <p class="font-medium text-chocolate-800">{{ maskedLocation }}</p>
-          <button class="btn-primary w-full mt-4">Postuler à cette mission</button>
+          <button v-if="mission.status === 'open'" class="btn-primary w-full mt-4">Postuler à cette mission</button>
+          <div v-else-if="mission.status === 'completed'" class="mt-4">
+            <span class="badge-success badge">Mission complétée</span>
+          </div>
+          <div v-else-if="mission.status === 'filled'" class="mt-4">
+            <span class="badge-warning badge">Mission pourvue</span>
+          </div>
         </div>
       </div>
     </div>

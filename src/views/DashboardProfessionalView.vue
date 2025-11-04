@@ -5,6 +5,7 @@ import { useProfessionalsStatsStore } from '@/stores/professionalsStats'
 import { useAuthStore } from '@/stores/auth'
 import { useProfessionalsStore } from '@/stores/professionals'
 import { useMissionsStore } from '@/stores/missions'
+import MissionCard from '@/components/MissionCard.vue'
 
 const router = useRouter()
 const statsStore = useProfessionalsStatsStore()
@@ -146,82 +147,85 @@ const maxMissions = computed(() => {
     <!-- Graphique 6 derniers mois -->
     <div class="card mb-8">
       <h2 class="text-xl font-semibold text-chocolate-800 mb-6">Évolution sur 6 mois</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <!-- Colonne 1 -->
         <div class="flex flex-col">
-          <div>
-            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Chiffre d'affaires mensuel - max: {{ maxEarnings }}€</h3>
+          <div class="mb-4 md:mb-8">
+            <h3 class="text-sm font-medium text-chocolate-700 mb-1 md:mb-2">Chiffre d'affaires mensuel</h3>
+            <span class="text-xs text-chocolate-500">max: {{ maxEarnings }}€</span>
           </div>
           <div class="relative flex-1">
             <!-- Zone graphique -->
-            <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
+            <div class="flex items-end gap-1 md:gap-2 pb-6 border-b border-chocolate-200 md:h-[180px] h-[140px] md:pl-8 pl-4">
               <template v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0">
                 <div 
                   v-for="(stat, idx) in statsStore.monthlyStats" 
                   :key="idx"
-                  class="flex-1 flex flex-col items-center gap-1 group relative"
+                  class="flex-1 flex flex-col items-center gap-0.5 md:gap-1 group relative min-w-0"
                 >
                   <div 
                     class="w-full bg-gradient-to-t from-primary-600 to-primary-400 rounded-t transition-all hover:from-primary-700 hover:to-primary-500 cursor-pointer shadow-sm hover:shadow-md"
                     :style="{ 
                       height: maxEarnings > 0 
-                        ? `${Math.max((stat.totalEarnings / maxEarnings) * 160, 20)}px` 
-                        : '20px',
-                      minHeight: '20px'
+                        ? `${Math.max((stat.totalEarnings / maxEarnings) * 110, 16)}px` 
+                        : '16px',
+                      minHeight: '16px'
                     }"
+                    :class="{'md:h-auto': true}"
                     :title="`${stat.month}: ${stat.totalEarnings}€`"
                   ></div>
-                  <span class="text-xs font-semibold text-chocolate-800 mt-1">{{ stat.totalEarnings }}€</span>
-                  <span class="text-xs text-chocolate-600 text-center font-medium">{{ stat.month.split(' ')[0] }}</span>
-                  <span class="text-xs text-chocolate-500 text-center">{{ stat.month.split(' ')[1] }}</span>
+                  <span class="text-[10px] md:text-xs font-semibold text-chocolate-800 mt-0.5 md:mt-1 leading-tight">{{ stat.totalEarnings }}€</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-600 text-center font-medium leading-tight">{{ stat.month.split(' ')[0] }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-500 text-center leading-tight hidden md:block">{{ stat.month.split(' ')[1] }}</span>
                 </div>
               </template>
               <p v-else class="text-sm text-chocolate-500 text-center w-full py-4">Chargement des données...</p>
             </div>
             <!-- Axe Y simplifié -->
-            <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-xs text-chocolate-400 pr-2">
+            <div v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] md:text-xs text-chocolate-400 pr-1 md:pr-2 md:pl-0 pl-1">
               <span>{{ maxEarnings }}€</span>
-              <span>{{ Math.round(maxEarnings / 2) }}€</span>
+              <span class="hidden md:inline">{{ Math.round(maxEarnings / 2) }}€</span>
               <span>0€</span>
             </div>
           </div>
         </div>
         <!-- Colonne 2 -->
         <div class="flex flex-col">
-          <div>
-            <h3 class="">Missions complétées</h3>
-            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxMissions }}</span>
+          <div class="mb-4 md:mb-8">
+            <h3 class="text-sm font-medium text-chocolate-700 mb-1 md:mb-2">Missions complétées</h3>
+            <span class="text-xs text-chocolate-500">max: {{ maxMissions }}</span>
           </div>
           <div class="relative flex-1">
             <!-- Zone graphique -->
-            <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
+            <div class="flex items-end gap-1 md:gap-2 pb-6 border-b border-chocolate-200 md:h-[180px] h-[140px] md:pl-8 pl-4">
               <template v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0">
                 <div 
                   v-for="(stat, idx) in statsStore.monthlyStats" 
                   :key="idx"
-                  class="flex-1 flex flex-col items-center gap-1 group relative"
+                  class="flex-1 flex flex-col items-center gap-0.5 md:gap-1 group relative min-w-0"
                 >
                   <div 
                     class="w-full bg-gradient-to-t from-accent-600 to-accent-400 rounded-t transition-all hover:from-accent-700 hover:to-accent-500 cursor-pointer shadow-sm hover:shadow-md"
                     :style="{ 
                       height: maxMissions > 0 
-                        ? `${Math.max((stat.missionsCompleted / maxMissions) * 160, 20)}px` 
-                        : '20px',
-                      minHeight: '20px'
+                        ? `${Math.max((stat.missionsCompleted / maxMissions) * 110, 16)}px` 
+                        : '16px',
+                      minHeight: '16px'
                     }"
+                    :class="{'md:h-auto': true}"
                     :title="`${stat.month}: ${stat.missionsCompleted} missions`"
                   ></div>
-                  <span class="text-xs font-semibold text-chocolate-800 mt-1">{{ stat.missionsCompleted }}</span>
-                  <span class="text-xs text-chocolate-600 text-center font-medium">{{ stat.month.split(' ')[0] }}</span>
-                  <span class="text-xs text-chocolate-500 text-center">{{ stat.month.split(' ')[1] }}</span>
+                  <span class="text-[10px] md:text-xs font-semibold text-chocolate-800 mt-0.5 md:mt-1 leading-tight">{{ stat.missionsCompleted }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-600 text-center font-medium leading-tight">{{ stat.month.split(' ')[0] }}</span>
+                  <span class="text-[9px] md:text-xs text-chocolate-500 text-center leading-tight hidden md:block">{{ stat.month.split(' ')[1] }}</span>
                 </div>
               </template>
               <p v-else class="text-sm text-chocolate-500 text-center w-full py-4">Chargement des données...</p>
             </div>
             <!-- Axe Y simplifié -->
-            <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-xs text-chocolate-400 pr-2">
+            <div v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0" class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] md:text-xs text-chocolate-400 pr-1 md:pr-2 md:pl-0 pl-1">
               <span>{{ maxMissions }}</span>
-              <span>{{ Math.round(maxMissions / 2) }}</span>
+              <span class="hidden md:inline">{{ Math.round(maxMissions / 2) }}</span>
               <span>0</span>
             </div>
           </div>
@@ -234,29 +238,59 @@ const maxMissions = computed(() => {
       <div class="lg:col-span-2">
         <h2 class="text-xl font-semibold text-chocolate-800 mb-4">Missions complétées</h2>
         <div class="space-y-4">
-          <div 
-            v-for="mission in statsStore.completedMissions" 
-            :key="mission.id"
-            class="card"
-          >
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <h3 class="font-semibold text-chocolate-800">{{ mission.title }}</h3>
-                <p class="text-sm text-chocolate-600 mt-1">{{ mission.bakeryName }}</p>
-                <div class="flex gap-4 mt-3 text-sm text-chocolate-700">
-                  <span>{{ mission.hours }}h</span>
-                  <span>{{ mission.hourlyRate }}€/h</span>
-                  <span class="font-semibold">{{ mission.totalEarnings }}€</span>
-                  <span class="text-chocolate-500">{{ new Date(mission.completedDate).toLocaleDateString('fr-FR') }}</span>
+          <template v-for="completedMission in statsStore.completedMissions" :key="completedMission.id">
+            <!-- Récupérer la mission complète depuis le store si disponible -->
+            <div v-if="missionsStore.getMissionById(completedMission.missionId)" class="relative">
+              <MissionCard :mission="missionsStore.getMissionById(completedMission.missionId)!" />
+              <div class="mt-4 pt-4 border-t border-chocolate-200 bg-cream-50 rounded-b-lg p-4">
+                <div class="flex flex-wrap gap-4 text-sm text-chocolate-700 mb-3">
+                  <span><strong>Heures:</strong> {{ completedMission.hours }}h</span>
+                  <span><strong>Tarif:</strong> {{ completedMission.hourlyRate }}€/h</span>
+                  <span><strong>Total:</strong> {{ completedMission.totalEarnings }}€</span>
+                  <span class="text-chocolate-500">{{ new Date(completedMission.completedDate).toLocaleDateString('fr-FR') }}</span>
                 </div>
-                <div v-if="mission.rating" class="mt-2">
-                  <span class="text-yellow-600">★</span>
-                  <span class="text-chocolate-700">{{ mission.rating }}/5</span>
-                  <p v-if="mission.review" class="text-sm text-chocolate-600 mt-1">{{ mission.review }}</p>
+                <div v-if="completedMission.rating" class="flex items-start gap-2">
+                  <div class="flex items-center">
+                    <span 
+                      v-for="star in 5" 
+                      :key="star"
+                      class="text-lg"
+                      :class="star <= completedMission.rating ? 'text-yellow-500' : 'text-gray-300'"
+                    >
+                      ★
+                    </span>
+                  </div>
+                  <div class="flex-1">
+                    <span class="text-sm text-chocolate-700 font-medium">{{ completedMission.rating }}/5</span>
+                    <p v-if="completedMission.review" class="text-sm text-chocolate-600 mt-1">{{ completedMission.review }}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            <!-- Fallback si mission non trouvée -->
+            <div v-else class="card">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <h3 class="font-semibold text-chocolate-800">{{ completedMission.title }}</h3>
+                  <p class="text-sm text-chocolate-600 mt-1">{{ completedMission.bakeryName }}</p>
+                  <div class="flex gap-4 mt-3 text-sm text-chocolate-700">
+                    <span>{{ completedMission.hours }}h</span>
+                    <span>{{ completedMission.hourlyRate }}€/h</span>
+                    <span class="font-semibold">{{ completedMission.totalEarnings }}€</span>
+                    <span class="text-chocolate-500">{{ new Date(completedMission.completedDate).toLocaleDateString('fr-FR') }}</span>
+                  </div>
+                  <div v-if="completedMission.rating" class="mt-2">
+                    <span class="text-yellow-600">★</span>
+                    <span class="text-chocolate-700">{{ completedMission.rating }}/5</span>
+                    <p v-if="completedMission.review" class="text-sm text-chocolate-600 mt-1">{{ completedMission.review }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <p v-if="statsStore.completedMissions.length === 0" class="text-sm text-chocolate-500 text-center py-8">
+            Aucune mission complétée
+          </p>
         </div>
       </div>
 
@@ -265,22 +299,13 @@ const maxMissions = computed(() => {
         <!-- Missions recommandées -->
         <div>
           <h2 class="text-xl font-semibold text-chocolate-800 mb-4">Opportunités</h2>
-          <div class="card">
-            <div class="space-y-3">
-              <div 
-                v-for="mission in recommendedMissions"
-                :key="mission.id"
-                class="border-l-4 border-accent-500 pl-3"
-              >
-                <p class="font-medium text-chocolate-800 text-sm">{{ mission.title }}</p>
-                <p class="text-xs text-chocolate-600 mt-1">{{ mission.bakeryName }}</p>
-                <p class="text-xs text-primary-600 font-semibold mt-1">{{ mission.hourlyRate }}€/h</p>
-                <RouterLink :to="`/missions/${mission.id}`" class="text-xs text-primary-600 hover:underline mt-1 inline-block">
-                  Voir détails →
-                </RouterLink>
-              </div>
-              <p v-if="recommendedMissions.length === 0" class="text-sm text-chocolate-500">Aucune mission recommandée pour le moment</p>
-            </div>
+          <div class="space-y-4">
+            <MissionCard 
+              v-for="mission in recommendedMissions"
+              :key="mission.id"
+              :mission="mission"
+            />
+            <p v-if="recommendedMissions.length === 0" class="text-sm text-chocolate-500 text-center py-4">Aucune mission recommandée pour le moment</p>
           </div>
         </div>
 

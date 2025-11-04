@@ -14,7 +14,7 @@ const missionsStore = useMissionsStore()
 
 const email = ref('')
 const password = ref('')
-const userType = ref<'bakery' | 'professional'>('bakery')
+const userType = ref<'bakery' | 'professional' | 'admin'>('bakery')
 const error = ref('')
 
 // Identifiants de démo
@@ -32,7 +32,31 @@ const demoCredentials = {
 async function handleLogin() {
   error.value = ''
   try {
-    if (userType.value === 'bakery') {
+    if (userType.value === 'admin') {
+      // Connexion admin
+      if (email.value === 'admin@choukette.fr' && password.value === 'admin123') {
+        const adminUser = {
+          id: 'admin1',
+          email: 'admin@choukette.fr',
+          name: 'Administrateur',
+          type: 'admin' as const,
+          avatar: '',
+          profile: {
+            businessName: 'Choukette Admin',
+            address: '',
+            phone: '',
+            description: '',
+            establishmentType: [],
+            createdAt: new Date().toISOString()
+          }
+        }
+        authStore.user = adminUser
+        localStorage.setItem('choukette_user', JSON.stringify(adminUser))
+        router.push('/admin')
+      } else {
+        error.value = 'Identifiants admin incorrects'
+      }
+    } else if (userType.value === 'bakery') {
       await bakeriesStore.login(email.value, password.value)
       const bakery = bakeriesStore.currentBakery
       if (bakery) {
@@ -65,6 +89,7 @@ async function handleLogin() {
         <select v-model="userType" class="input-field">
           <option value="bakery">Boulangerie</option>
           <option value="professional">Professionnel</option>
+          <option value="admin">Administrateur</option>
         </select>
       </div>
 
@@ -88,8 +113,11 @@ async function handleLogin() {
           <p v-if="userType === 'bakery'">
             Boulangerie: <code class="bg-cream-100 px-2 py-1 rounded">boulangerie@moulin.fr / demo123</code>
           </p>
-          <p v-else>
+          <p v-else-if="userType === 'professional'">
             Professionnel: <code class="bg-cream-100 px-2 py-1 rounded">camille.moreau@example.fr / demo123</code>
+          </p>
+          <p v-else-if="userType === 'admin'">
+            Admin: <code class="bg-cream-100 px-2 py-1 rounded">admin@choukette.fr / admin123</code>
           </p>
         </div>
       </div>

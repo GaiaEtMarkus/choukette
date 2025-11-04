@@ -25,6 +25,11 @@ const userAvatar = computed(() => {
   return professionalPhotos[key] || ''
 })
 
+const dashboardRoute = computed(() => {
+  if (!authStore.isAuthenticated || !authStore.userType) return '/'
+  return authStore.userType === 'bakery' ? '/dashboard/bakery' : '/dashboard/professional'
+})
+
 onMounted(() => {
   authStore.initializeAuth()
 })
@@ -101,6 +106,22 @@ const closeSnackbar = () => {
               active-class="text-primary-600"
             >
               Artisans
+            </RouterLink>
+            <RouterLink 
+              v-if="authStore.isAuthenticated && authStore.userType !== 'admin'"
+              :to="dashboardRoute" 
+              class="text-chocolate-600 hover:text-primary-600 font-medium transition-colors"
+              active-class="text-primary-600"
+            >
+              Dashboard
+            </RouterLink>
+            <RouterLink 
+              v-if="authStore.isAuthenticated && authStore.userType === 'admin'"
+              to="/admin" 
+              class="text-chocolate-600 hover:text-primary-600 font-medium transition-colors"
+              active-class="text-primary-600"
+            >
+              Administration
             </RouterLink>
           </nav>
 
@@ -187,6 +208,24 @@ const closeSnackbar = () => {
               active-class="text-primary-600"
             >
               👨‍🍳 Artisans
+            </RouterLink>
+            <RouterLink 
+              v-if="authStore.isAuthenticated && authStore.userType !== 'admin'"
+              :to="dashboardRoute" 
+              @click="closeMobileMenu"
+              class="block text-chocolate-600 hover:text-primary-600 font-medium transition-colors py-2"
+              active-class="text-primary-600"
+            >
+              📊 Dashboard
+            </RouterLink>
+            <RouterLink 
+              v-if="authStore.isAuthenticated && authStore.userType === 'admin'"
+              to="/admin" 
+              @click="closeMobileMenu"
+              class="block text-chocolate-600 hover:text-primary-600 font-medium transition-colors py-2"
+              active-class="text-primary-600"
+            >
+              ⚙️ Administration
             </RouterLink>
           </nav>
 

@@ -1,6 +1,12 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
+export interface BakeryReview {
+  rating: number // 1 à 5 étoiles
+  comment?: string
+  reviewedAt: string
+}
+
 export interface Mission {
   id: string
   title: string
@@ -32,6 +38,7 @@ export interface Mission {
   }
   createdAt: string
   urgency?: 'immediate' | 'same-day' | 'within-week'
+  bakeryReview?: BakeryReview // Avis de la boulangerie après mission complétée
 }
 
 export interface Application {
@@ -92,7 +99,7 @@ export const useMissionsStore = defineStore('missions', () => {
           specialties: ['Boulangerie artisanale', 'Viennoiserie']
         },
         equipment: ['Four à sole', 'Pétrin spirale', 'Chambre de fermentation'],
-        status: 'open',
+        status: 'completed',
         applicants: 5,
         location: {
           address: '23 Rue de Rivoli',
@@ -153,7 +160,7 @@ export const useMissionsStore = defineStore('missions', () => {
           specialties: ['Vente', 'Accueil clientèle']
         },
         equipment: ['Caisse enregistreuse', 'Balance', 'Vitrine réfrigérée'],
-        status: 'open',
+        status: 'completed',
         applicants: 8,
         location: {
           address: '12 Place Saint-Germain',
@@ -214,7 +221,7 @@ export const useMissionsStore = defineStore('missions', () => {
           specialties: ['Levain naturel', 'Pains anciens']
         },
         equipment: ['Four à sole', 'Bassinage', 'Chambre de pousse'],
-        status: 'open',
+        status: 'completed',
         applicants: 1,
         location: { address: '5 Rue Oberkampf', city: 'Paris', postalCode: '75011' },
         createdAt: new Date().toISOString()
@@ -264,7 +271,7 @@ export const useMissionsStore = defineStore('missions', () => {
           specialties: ['Viennoiserie', 'Tourage']
         },
         equipment: ['Laminoir', 'Chambre de pousse'],
-        status: 'open',
+        status: 'completed',
         applicants: 3,
         location: { address: '9 Rue Lafayette', city: 'Paris', postalCode: '75009' },
         createdAt: new Date().toISOString()
@@ -297,7 +304,7 @@ export const useMissionsStore = defineStore('missions', () => {
       {
         id: '9',
         title: 'Boulangerie bio - pains anciens',
-        description: 'Gamme pains anciens en farines bio (épeautre, seigle, blés anciens) avec forte exigence sur l’authenticité. Vous mettez en œuvre autolyses, levain, fermentations longues au froid et façonnages en bannetons. Vous ajustez l’acidité et la force de la pâte pour obtenir un développement de mie harmonieux et une croûte bien développée. Vous êtes sensible aux profils de farines, échangez avec les meuniers et respectez les engagements qualité de la maison (bio, circuits courts, traçabilité).',
+        description: 'Gamme pains anciens en farines bio (épeautre, seigle, blés anciens) avec forte exigence sur l\'authenticité. Vous mettez en œuvre autolyses, levain, fermentations longues au froid et façonnages en bannetons. Vous ajustez l\'acidité et la force de la pâte pour obtenir un développement de mie harmonieux et une croûte bien développée. Vous êtes sensible aux profils de farines, échangez avec les meuniers et respectez les engagements qualité de la maison (bio, circuits courts, traçabilité).',
         bakeryId: 'bakery9',
         bakeryName: 'Graines & Levains',
         bakeryAddress: '3 Rue de la République, 92100 Boulogne-Billancourt',
@@ -314,7 +321,7 @@ export const useMissionsStore = defineStore('missions', () => {
           specialties: ['Pains anciens', 'Bio']
         },
         equipment: ['Four à sole', 'Banneton'],
-        status: 'open',
+        status: 'completed',
         applicants: 2,
         location: { address: '3 Rue de la République', city: 'Boulogne-Billancourt', postalCode: '92100' },
         createdAt: new Date().toISOString()
@@ -713,8 +720,43 @@ export const useMissionsStore = defineStore('missions', () => {
     return filtered
   }
 
+  function addBakeryReview(missionId: string, rating: number, comment?: string) {
+    const mission = missions.value.find(m => m.id === missionId)
+    if (mission) {
+      mission.bakeryReview = {
+        rating,
+        comment,
+        reviewedAt: new Date().toISOString()
+      }
+      // Marquer la mission comme complétée si elle ne l'est pas déjà
+      if (mission.status === 'filled') {
+        mission.status = 'completed'
+      }
+    }
+  }
+
+  // Ajouter des avis mock pour certaines missions complétées
+  function addMockBakeryReviews() {
+    // Mission 1 - Remplacement weekend
+    addBakeryReview('1', 5, 'Excellent professionnel, très ponctuel et compétent. Le travail a été réalisé dans les temps et avec une qualité irréprochable. Nous recommandons vivement !')
+    
+    // Mission 3 - Vendeur/Vendeuse
+    addBakeryReview('3', 4, 'Très bon contact avec la clientèle, dynamique et à l\'écoute. Parfait pour le service en boutique.')
+    
+    // Mission 5 - Boulanger levain
+    addBakeryReview('5', 5, 'Maîtrise parfaite du levain naturel, très professionnel. Les clients ont adoré ses pains. Nous le recontacterons avec plaisir.')
+    
+    // Mission 7 - Pâtisserie
+    addBakeryReview('7', 5, 'Créativité et précision au rendez-vous. Les entremets étaient magnifiques et délicieux. Un vrai talent !')
+    
+    // Mission 9 - Tourneur
+    addBakeryReview('9', 4, 'Bon travail sur les viennoiseries, régularité dans le façonnage. Satisfait du résultat.')
+  }
+
   // Initialize with mock data
   generateMockMissions()
+  // Ajouter les avis mock après la génération des missions
+  addMockBakeryReviews()
 
   return {
     missions,
@@ -727,6 +769,7 @@ export const useMissionsStore = defineStore('missions', () => {
     getMissionById,
     getApplicationsForMission,
     searchMissions,
-    generateMockMissions
+    generateMockMissions,
+    addBakeryReview
   }
 }) 
