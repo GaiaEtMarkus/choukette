@@ -56,12 +56,12 @@ const features = ref([
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-              <RouterLink to="/register?type=professional" class="btn-primary text-lg px-8 py-4">
-                Je suis professionnel 👨‍🍳
-              </RouterLink>
-              <RouterLink to="/register?type=bakery" class="btn-secondary text-lg px-8 py-4">
-                Je suis boulangerie 🏪
-              </RouterLink>
+              <a href="#professionnels" class="btn-primary text-lg px-8 py-4">
+                Je suis un professionnel 👨‍🍳
+              </a>
+              <a href="#boulangeries" class="btn-secondary text-lg px-8 py-4">
+                Je suis une boulangerie 🏪
+              </a>
             </div>
 
             <!-- Social Proof -->
@@ -94,7 +94,7 @@ const features = ref([
                   <span class="text-2xl">⚡</span>
                   <div>
                     <p class="font-semibold">Mission urgente</p>
-                    <p class="text-xs opacity-90">35€/h • Pâtissier</p>
+                    <p class="text-xs opacity-90">35€/h • Boulanger</p>
                   </div>
                 </div>
               </div>
@@ -152,60 +152,90 @@ const features = ref([
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <!-- Pour les professionnels -->
-          <div class="space-y-8">
+          <div id="professionnels" class="space-y-8 scroll-mt-20">
             <h3 class="text-2xl font-semibold text-primary-600 mb-8">
               👨‍🍳 Pour les professionnels
             </h3>
-            <div class="space-y-6">
+            <div class="space-y-8">
               <div class="flex items-start space-x-4">
-                <div class="bg-primary-100 text-primary-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
+                <div class="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">1</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Créez votre profil</h4>
-                  <p class="text-chocolate-600 text-sm">CV, portfolio, certifications</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Créez votre profil professionnel</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Remplissez votre profil complet avec vos informations professionnelles : CV détaillé, portfolio de vos réalisations, certifications et diplômes obtenus (CAP Boulanger, Brevet Professionnel, formations spécialisées, etc.).
+                  </p>
+                  <p class="text-chocolate-600">
+                    Ajoutez vos spécialités (pains traditionnels, viennoiseries, pâtisserie fine, etc.), vos années d'expérience, et vos disponibilités. Plus votre profil est complet, plus vous serez visible par les boulangeries !
+                  </p>
                 </div>
               </div>
               <div class="flex items-start space-x-4">
-                <div class="bg-primary-100 text-primary-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
+                <div class="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">2</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Recherchez des missions</h4>
-                  <p class="text-chocolate-600 text-sm">Filtres avancés, alertes personnalisées</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Recherchez et découvrez des missions</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Utilisez nos filtres avancés pour trouver les missions qui correspondent à vos compétences : type de poste (boulanger, pâtissier, tourneur, vendeur), localisation géographique, tarif horaire, type de mission (ponctuelle, récurrente, événement, urgent).
+                  </p>
+                  <p class="text-chocolate-600">
+                    Activez les alertes personnalisées pour être notifié en temps réel dès qu'une mission correspond à vos critères. Vous pouvez aussi sauvegarder vos recherches favorites pour y revenir rapidement.
+                  </p>
                 </div>
               </div>
               <div class="flex items-start space-x-4">
-                <div class="bg-primary-100 text-primary-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
+                <div class="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">3</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Postulez et travaillez</h4>
-                  <p class="text-chocolate-600 text-sm">Gestion administrative simplifiée</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Postulez et travaillez en toute simplicité</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Candidature en un clic ! Rédigez un message personnalisé pour chaque mission et postulez directement. Suivez l'état de vos candidatures en temps réel (en attente, acceptée, refusée).
+                  </p>
+                  <p class="text-chocolate-600">
+                    Une fois accepté, la gestion administrative est simplifiée : génération automatique des contrats (auto-entrepreneur ou intérim selon votre statut), suivi de vos heures travaillées, facturation automatique, et paiement sécurisé. Tous vos documents sont disponibles dans votre espace personnel.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Pour les boulangeries -->
-          <div class="space-y-8">
+          <div id="boulangeries" class="space-y-8 scroll-mt-20">
             <h3 class="text-2xl font-semibold text-accent-600 mb-8">
               🏪 Pour les boulangeries
             </h3>
-            <div class="space-y-6">
+            <div class="space-y-8">
               <div class="flex items-start space-x-4">
-                <div class="bg-accent-100 text-accent-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
+                <div class="bg-accent-100 text-accent-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">1</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Publiez vos besoins</h4>
-                  <p class="text-chocolate-600 text-sm">Missions ponctuelles, récurrentes ou urgentes</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Publiez vos besoins en quelques clics</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Créez une mission en quelques minutes : décrivez le poste recherché (boulanger, pâtissier, tourneur, vendeur), les horaires, la durée (mission ponctuelle d'un jour, remplacement sur plusieurs semaines, poste récurrent, ou mission événementielle).
+                  </p>
+                  <p class="text-chocolate-600">
+                    Définissez vos critères : niveau d'expérience requis, certifications souhaitées, spécialités demandées, et tarif horaire proposé. Vous pouvez aussi activer le mode "SOS Urgence" pour les remplacements de dernière minute, avec un tarif majoré pour attirer rapidement les meilleurs candidats.
+                  </p>
                 </div>
               </div>
               <div class="flex items-start space-x-4">
-                <div class="bg-accent-100 text-accent-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
+                <div class="bg-accent-100 text-accent-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">2</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Recevez des candidatures</h4>
-                  <p class="text-chocolate-600 text-sm">Matching intelligent selon vos critères</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Recevez des candidatures ciblées</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Notre système de matching intelligent analyse automatiquement les profils des professionnels et vous propose les candidatures les plus pertinentes selon vos critères : compétences, proximité géographique, disponibilités, et notes des missions précédentes.
+                  </p>
+                  <p class="text-chocolate-600">
+                    Consultez les profils détaillés, les portfolios, les certifications, et les avis laissés par d'autres boulangeries. Triez et filtrez les candidatures selon vos priorités. Vous recevez des notifications en temps réel pour chaque nouvelle candidature.
+                  </p>
                 </div>
               </div>
               <div class="flex items-start space-x-4">
-                <div class="bg-accent-100 text-accent-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
+                <div class="bg-accent-100 text-accent-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg flex-shrink-0">3</div>
                 <div>
-                  <h4 class="font-semibold text-chocolate-800">Sélectionnez et collaborez</h4>
-                  <p class="text-chocolate-600 text-sm">Contrats automatiques, suivi facilité</p>
+                  <h4 class="font-semibold text-chocolate-800 text-lg mb-2">Sélectionnez et collaborez en toute confiance</h4>
+                  <p class="text-chocolate-600 mb-2">
+                    Acceptez la candidature qui vous convient le mieux. Tous les contrats sont générés automatiquement selon le statut du professionnel (auto-entrepreneur avec facturation, ou intérim avec gestion administrative simplifiée).
+                  </p>
+                  <p class="text-chocolate-600">
+                    Suivez la mission en temps réel : validation des heures travaillées, communication directe avec le professionnel via la messagerie intégrée, et évaluation après la mission. Vous pouvez aussi réengager facilement les professionnels qui vous ont satisfaits pour des missions futures.
+                  </p>
                 </div>
               </div>
             </div>

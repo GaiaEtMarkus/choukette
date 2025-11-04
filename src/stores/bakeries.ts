@@ -119,12 +119,70 @@ export const useBakeriesStore = defineStore('bakeries', () => {
       currentBakery.value = bakery
       // Charger les missions et candidatures de cette boulangerie
       loadBakeryData(bakery.id)
+      // Sauvegarder après connexion
+      saveBakeryDataToStorage()
       return Promise.resolve(bakery)
     }
     return Promise.reject(new Error('Identifiants incorrects'))
   }
 
+  // Initialiser les données depuis localStorage au démarrage
+  function initializeBakeryData() {
+    loadBakeryDataFromStorage()
+    if (monthlyStatsData.value.length === 0) {
+      initializeMonthlyStats()
+      saveBakeryDataToStorage()
+    }
+  }
+
+  // Fonctions de sauvegarde/chargement localStorage
+  function saveBakeryDataToStorage() {
+    if (currentBakery.value) {
+      const data = {
+        currentBakery: currentBakery.value,
+        bakeryMissions: bakeryMissions.value,
+        bakeryApplications: bakeryApplications.value,
+        monthlyStatsData: monthlyStatsData.value
+      }
+      localStorage.setItem('choukette_bakery_data', JSON.stringify(data))
+    }
+  }
+
+  function loadBakeryDataFromStorage() {
+    const saved = localStorage.getItem('choukette_bakery_data')
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        currentBakery.value = data.currentBakery
+        bakeryMissions.value = data.bakeryMissions || []
+        bakeryApplications.value = data.bakeryApplications || []
+        if (data.monthlyStatsData && data.monthlyStatsData.length > 0) {
+          monthlyStatsData.value = data.monthlyStatsData
+        }
+        return true
+      } catch (error) {
+        console.error('Erreur lors du chargement des données boulangerie:', error)
+        localStorage.removeItem('choukette_bakery_data')
+      }
+    }
+    return false
+  }
+
+  function clearBakeryDataFromStorage() {
+    localStorage.removeItem('choukette_bakery_data')
+  }
+
   function loadBakeryData(bakeryId: string, missionsList: Mission[] = []) {
+    // Essayer de charger depuis localStorage
+    const loaded = loadBakeryDataFromStorage()
+    if (loaded && currentBakery.value?.id === bakeryId) {
+      // Données déjà chargées depuis localStorage
+      return
+    }
+
+    // Sinon, charger/générer les données
+    currentBakery.value = bakeries.value.find(b => b.id === bakeryId) || null
+    
     // Mock: charger les missions de cette boulangerie
     let filtered = missionsList.filter((m: Mission) => m.bakeryId === bakeryId)
     
@@ -223,13 +281,16 @@ export const useBakeriesStore = defineStore('bakeries', () => {
         appliedAt: '2024-01-20T14:15:00Z'
       }
     ]
+
+    // Sauvegarder dans localStorage
+    saveBakeryDataToStorage()
   }
 
   // Init
   if (!bakeries.value.length) generateMockBakeries()
   
-  // Initialiser les stats mensuelles au chargement
-  initializeMonthlyStats()
+  // Initialiser les données depuis localStorage ou créer des stats par défaut
+  initializeBakeryData()
 
   return {
     bakeries,
@@ -243,7 +304,10 @@ export const useBakeriesStore = defineStore('bakeries', () => {
     pendingApplications,
     monthlyStats,
     login,
-    loadBakeryData
+    loadBakeryData,
+    saveBakeryDataToStorage,
+    clearBakeryDataFromStorage,
+    initializeBakeryData
   }
 })
 

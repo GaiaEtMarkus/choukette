@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { onMounted, ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import Snackbar from '@/components/Snackbar.vue'
 
+const router = useRouter()
 const authStore = useAuthStore()
 const isMobileMenuOpen = ref(false)
+
+// État du snackbar
+const snackbarVisible = ref(false)
+const snackbarMessage = ref('')
 
 const bakeryPhotos = import.meta.glob('@/assets/boulangeries/*', { eager: true, import: 'default' }) as Record<string, string>
 const professionalPhotos = import.meta.glob('@/assets/boulangers/*', { eager: true, import: 'default' }) as Record<string, string>
@@ -29,6 +35,28 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+// Fonction de déconnexion avec redirection et snackbar
+const handleLogout = () => {
+  authStore.logout()
+  closeMobileMenu()
+  
+  // Rediriger vers la page d'accueil
+  router.push('/')
+  
+  // Afficher le snackbar
+  snackbarMessage.value = 'Déconnexion réussie !'
+  snackbarVisible.value = true
+  
+  // Fermer automatiquement après 3 secondes
+  setTimeout(() => {
+    snackbarVisible.value = false
+  }, 3000)
+}
+
+const closeSnackbar = () => {
+  snackbarVisible.value = false
 }
 </script>
 
@@ -95,7 +123,7 @@ const closeMobileMenu = () => {
                 />
                 <span class="text-chocolate-700 font-medium hidden lg:inline">{{ authStore.user?.name }}</span>
                 <button 
-                  @click="authStore.logout"
+                  @click="handleLogout"
                   class="text-chocolate-500 hover:text-chocolate-700 text-sm"
                 >
                   Déconnexion
@@ -193,7 +221,7 @@ const closeMobileMenu = () => {
                 </div>
               </div>
               <button 
-                @click="authStore.logout(); closeMobileMenu()"
+                @click="handleLogout"
                 class="block w-full text-center text-chocolate-500 hover:text-chocolate-700 text-sm py-2 border border-chocolate-300 rounded-lg"
               >
                 Déconnexion
@@ -208,6 +236,13 @@ const closeMobileMenu = () => {
     <main class="flex-1">
       <RouterView />
     </main>
+
+    <!-- Snackbar pour les notifications -->
+    <Snackbar 
+      :visible="snackbarVisible" 
+      :message="snackbarMessage"
+      @close="closeSnackbar"
+    />
 
     <!-- Footer -->
     <footer class="bg-chocolate-800 text-cream-100 py-12 mt-16">

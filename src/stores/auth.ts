@@ -1,5 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { useBakeriesStore } from './bakeries'
+import { useProfessionalsStatsStore } from './professionalsStats'
 
 export interface User {
   id: string
@@ -83,7 +85,23 @@ export const useAuthStore = defineStore('auth', () => {
 
   function logout() {
     user.value = null
+    // Nettoyer toutes les données du localStorage
     localStorage.removeItem('choukette_user')
+    
+    // Nettoyer les données des stores
+    const bakeryStore = useBakeriesStore()
+    const professionalStatsStore = useProfessionalsStatsStore()
+    
+    bakeryStore.clearBakeryDataFromStorage()
+    professionalStatsStore.clearProfessionalDataFromStorage()
+    
+    // Réinitialiser les stores
+    bakeryStore.currentBakery = null
+    bakeryStore.bakeryMissions = []
+    bakeryStore.bakeryApplications = []
+    
+    professionalStatsStore.completedMissions = []
+    professionalStatsStore.currentProfessionalId = null
   }
 
   function initializeAuth() {

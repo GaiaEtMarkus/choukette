@@ -87,8 +87,56 @@ export const useProfessionalsStatsStore = defineStore('professionalsStats', () =
     return monthlyStatsData.value
   })
 
+  // Fonctions de sauvegarde/chargement localStorage
+  function saveProfessionalDataToStorage() {
+    if (currentProfessionalId.value) {
+      const data = {
+        completedMissions: completedMissions.value,
+        currentProfessionalId: currentProfessionalId.value,
+        monthlyStatsData: monthlyStatsData.value
+      }
+      localStorage.setItem('choukette_professional_stats', JSON.stringify(data))
+    }
+  }
+
+  function loadProfessionalDataFromStorage() {
+    const saved = localStorage.getItem('choukette_professional_stats')
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        completedMissions.value = data.completedMissions || []
+        currentProfessionalId.value = data.currentProfessionalId || null
+        if (data.monthlyStatsData && data.monthlyStatsData.length > 0) {
+          monthlyStatsData.value = data.monthlyStatsData
+        }
+        return true
+      } catch (error) {
+        console.error('Erreur lors du chargement des données professionnel:', error)
+        localStorage.removeItem('choukette_professional_stats')
+      }
+    }
+    return false
+  }
+
+  function clearProfessionalDataFromStorage() {
+    localStorage.removeItem('choukette_professional_stats')
+  }
+
   function loadProfessionalData(professionalId: string) {
     currentProfessionalId.value = professionalId
+    
+    // Essayer de charger depuis localStorage
+    const loaded = loadProfessionalDataFromStorage()
+    if (loaded && currentProfessionalId.value === professionalId) {
+      // Si les stats mensuelles ne sont pas chargées, les initialiser
+      if (monthlyStatsData.value.length === 0) {
+        initializeMonthlyStats()
+        saveProfessionalDataToStorage()
+      }
+      return
+    }
+
+    // Sinon, générer les données mock
     // Initialiser les stats mensuelles si pas encore fait
     initializeMonthlyStats()
     // Mock: générer des missions complétées variées (plus nombreuses pour le planning)
@@ -163,7 +211,22 @@ export const useProfessionalsStatsStore = defineStore('professionalsStats', () =
         rating: 5
       }
     ]
+    
+    // Sauvegarder dans localStorage
+    saveProfessionalDataToStorage()
   }
+
+  // Initialiser les données depuis localStorage au démarrage
+  function initializeProfessionalData() {
+    loadProfessionalDataFromStorage()
+    if (monthlyStatsData.value.length === 0) {
+      initializeMonthlyStats()
+      saveProfessionalDataToStorage()
+    }
+  }
+
+  // Initialiser les stats mensuelles au chargement
+  initializeProfessionalData()
 
   return {
     completedMissions,
@@ -173,7 +236,10 @@ export const useProfessionalsStatsStore = defineStore('professionalsStats', () =
     averageRating,
     missionsThisMonth,
     monthlyStats,
-    loadProfessionalData
+    loadProfessionalData,
+    saveProfessionalDataToStorage,
+    clearProfessionalDataFromStorage,
+    initializeProfessionalData
   }
 })
 

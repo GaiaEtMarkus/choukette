@@ -24,13 +24,25 @@ onMounted(() => {
     router.push('/login')
     return
   }
-  const bakery = bakeryStore.currentBakery
-  if (bakery) {
-    bakeryStore.loadBakeryData(bakery.id, missionsStore.missions)
+  
+  // Initialiser les données depuis localStorage si disponibles
+  bakeryStore.initializeBakeryData()
+  
+  // Si pas de boulangerie chargée, essayer de charger depuis les données mock
+  if (!bakeryStore.currentBakery) {
+    // Pour la démo, on peut créer une boulangerie par défaut
+    const bakery = bakeryStore.bakeries[0]
+    if (bakery) {
+      bakeryStore.currentBakery = bakery
+      bakeryStore.loadBakeryData(bakery.id, missionsStore.missions)
+    }
+  } else {
+    // Si on a déjà une boulangerie, recharger les données au cas où
+    bakeryStore.loadBakeryData(bakeryStore.currentBakery.id, missionsStore.missions)
   }
+  
   // Force l'initialisation des stats mensuelles
   if (bakeryStore.monthlyStats && bakeryStore.monthlyStats.length === 0) {
-    // L'initialisation se fait automatiquement via le computed, mais on peut accéder pour forcer
     const _ = bakeryStore.monthlyStats // Force l'évaluation
   }
 })
@@ -116,12 +128,13 @@ const maxApplicationsReceived = computed(() =>
     <div class="card mb-8">
       <h2 class="text-xl font-semibold text-chocolate-800 mb-6">Évolution sur 6 mois</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-sm font-medium text-chocolate-700">Missions postées</h3>
-            <span class="text-xs text-chocolate-500">max: {{ maxMissionsPosted }}</span>
+        <!-- Colonne 1 -->
+        <div class="flex flex-col">
+          <div>
+            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Missions postées</h3>
+            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxMissionsPosted }}</span>
           </div>
-          <div class="relative">
+          <div class="relative flex-1">
             <!-- Zone graphique -->
             <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
               <template v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0">
@@ -155,12 +168,13 @@ const maxApplicationsReceived = computed(() =>
             </div>
           </div>
         </div>
-        <div>
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-sm font-medium text-chocolate-700">Candidatures reçues</h3>
-            <span class="text-xs text-chocolate-500">max: {{ maxApplicationsReceived }}</span>
+        <!-- Colonne 2 -->
+        <div class="flex flex-col">
+          <div>
+            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Candidatures reçues</h3>
+            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxApplicationsReceived }}</span>
           </div>
-          <div class="relative">
+          <div class="relative flex-1">
             <!-- Zone graphique -->
             <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
               <template v-if="bakeryStore.monthlyStats && bakeryStore.monthlyStats.length > 0">

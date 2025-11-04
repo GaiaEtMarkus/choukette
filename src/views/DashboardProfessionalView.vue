@@ -23,12 +23,21 @@ onMounted(() => {
     router.push('/login')
     return
   }
+  
+  // Initialiser les données depuis localStorage si disponibles
+  statsStore.initializeProfessionalData()
+  
+  // Si on a un professionnel, charger ses données
   if (currentPro.value) {
     statsStore.loadProfessionalData(currentPro.value.id)
+  } else if (professionalsStore.professionals.length > 0) {
+    // Pour la démo, prendre le premier professionnel
+    const pro = professionalsStore.professionals[0]
+    statsStore.loadProfessionalData(pro.id)
   }
+  
   // Force l'initialisation des stats mensuelles
   if (statsStore.monthlyStats && statsStore.monthlyStats.length === 0) {
-    // L'initialisation se fait automatiquement via le computed, mais on peut accéder pour forcer
     const _ = statsStore.monthlyStats // Force l'évaluation
   }
 })
@@ -138,12 +147,12 @@ const maxMissions = computed(() => {
     <div class="card mb-8">
       <h2 class="text-xl font-semibold text-chocolate-800 mb-6">Évolution sur 6 mois</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-sm font-medium text-chocolate-700">Chiffre d'affaires mensuel</h3>
-            <span class="text-xs text-chocolate-500">max: {{ maxEarnings }}€</span>
+        <!-- Colonne 1 -->
+        <div class="flex flex-col">
+          <div>
+            <h3 class="text-sm font-medium text-chocolate-700 mb-2">Chiffre d'affaires mensuel - max: {{ maxEarnings }}€</h3>
           </div>
-          <div class="relative">
+          <div class="relative flex-1">
             <!-- Zone graphique -->
             <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
               <template v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0">
@@ -177,12 +186,13 @@ const maxMissions = computed(() => {
             </div>
           </div>
         </div>
-        <div>
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-sm font-medium text-chocolate-700">Missions complétées</h3>
-            <span class="text-xs text-chocolate-500">max: {{ maxMissions }}</span>
+        <!-- Colonne 2 -->
+        <div class="flex flex-col">
+          <div>
+            <h3 class="">Missions complétées</h3>
+            <span class="text-xs text-chocolate-500 block mb-8">max: {{ maxMissions }}</span>
           </div>
-          <div class="relative">
+          <div class="relative flex-1">
             <!-- Zone graphique -->
             <div class="flex items-end gap-2 pb-6 border-b border-chocolate-200" style="height: 180px; padding-left: 2rem;">
               <template v-if="statsStore.monthlyStats && statsStore.monthlyStats.length > 0">
