@@ -53,7 +53,7 @@ const filtered = computed(() => {
 <template>
   <div class="container-section py-10">
     <div class="mb-8">
-      <h1 class="text-3xl font-display font-bold text-chocolate-800">Professionnels</h1>
+      <h1 class="text-3xl font-display font-bold text-chocolate-800">Artisans</h1>
       <p class="text-chocolate-600 mt-1">Découvrez des profils certifiés et expérimentés</p>
     </div>
 

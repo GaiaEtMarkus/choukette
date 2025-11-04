@@ -100,7 +100,7 @@ const closeSnackbar = () => {
               class="text-chocolate-600 hover:text-primary-600 font-medium transition-colors"
               active-class="text-primary-600"
             >
-              Professionnels
+              Artisans
             </RouterLink>
           </nav>
 
@@ -186,7 +186,7 @@ const closeSnackbar = () => {
               class="block text-chocolate-600 hover:text-primary-600 font-medium transition-colors py-2"
               active-class="text-primary-600"
             >
-              👨‍🍳 Professionnels
+              👨‍🍳 Artisans
             </RouterLink>
           </nav>
 

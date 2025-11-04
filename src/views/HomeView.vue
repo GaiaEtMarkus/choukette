@@ -49,7 +49,7 @@ const features = ref([
                 de la boulangerie
               </h1>
               <p class="text-lg text-chocolate-600 max-w-xl">
-                La première plateforme spécialisée qui met en relation boulangeries et professionnels indépendants. 
+                La première plateforme spécialisée qui met en relation boulangeries et artisans indépendants. 
                 Trouvez la mission parfaite ou le talent qu'il vous faut !
               </p>
             </div>
@@ -57,7 +57,7 @@ const features = ref([
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
               <a href="#professionnels" class="btn-primary text-lg px-8 py-4">
-                Je suis un professionnel 👨‍🍳
+                Je suis un artisan 👨‍🍳
               </a>
               <a href="#boulangeries" class="btn-secondary text-lg px-8 py-4">
                 Je suis une boulangerie 🏪
@@ -75,7 +75,7 @@ const features = ref([
                      class="w-10 h-10 rounded-full border-2 border-white ring-2 ring-primary-300 object-cover" alt="Professionnel boulanger 3">
               </div>
               <p class="text-sm text-chocolate-600">
-                <span class="font-semibold">1000+</span> professionnels nous font déjà confiance
+                <span class="font-semibold">1000+</span> artisans nous font déjà confiance
               </p>
             </div>
           </div>
@@ -154,7 +154,7 @@ const features = ref([
           <!-- Pour les professionnels -->
           <div id="professionnels" class="space-y-8 scroll-mt-20">
             <h3 class="text-2xl font-semibold text-primary-600 mb-8">
-              👨‍🍳 Pour les professionnels
+              👨‍🍳 Pour les artisans
             </h3>
             <div class="space-y-8">
               <div class="flex items-start space-x-4">
