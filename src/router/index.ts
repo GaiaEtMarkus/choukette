@@ -67,6 +67,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/AboutView.vue'),
     },
+    {
+      path: '/pourquoi-choukette',
+      name: 'why-choukette',
+      component: () => import('@/views/WhyChouketteView.vue'),
+    },
   ],
 })
 
