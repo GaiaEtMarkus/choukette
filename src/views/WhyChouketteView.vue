@@ -9,7 +9,6 @@
       <div class="container-section relative">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold uppercase tracking-wide">Pitch Agence d'intérim</span>
             <h1 class="mt-6 text-4xl md:text-5xl font-display font-bold leading-tight">
               Choukette : votre bras droit digital pour dominer l'intérim boulangerie & pâtisserie
             </h1>
