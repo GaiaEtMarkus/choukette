@@ -173,7 +173,6 @@
           <div class="card h-full">
             <h3 class="text-xl font-semibold mb-3">Administration</h3>
             <ul class="space-y-2 text-sm text-chocolate-600">
-              <li>• 40+ profils artisans & boulangeries documentés</li>
               <li>• Vérification SIRET, notes internes, documents (CAP, RIB, etc.)</li>
               <li>• Statistiques consolidées (CA, missions, croissance, satisfaction)</li>
               <li>• Gamification : gérer les points, badges, top talents</li>
