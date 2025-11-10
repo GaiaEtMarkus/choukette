@@ -97,7 +97,7 @@
           <div class="card h-full">
             <h3 class="font-semibold text-lg mb-3">1. Opérations fluides</h3>
             <p class="text-sm text-chocolate-600">Dashboards prêts à l'emploi, données persistées, fiches missions ultra détaillées. Vos équipes pilotent plus de comptes sans brûler d'énergie.</p>
-            <p class="mt-3 text-xs text-chocolate-500">Tâches répétitives réduites jusqu'à 45% grâce à la délégation aux artisans (dossiers, disponibilités, documents) et, demain, aux boulangeries qui pourront directement choisir leurs profils favoris. Les meilleurs artisans sont naturellement attirés par une plateforme qui valorise leur expertise et leur visibilité.</p>
+            <p class="mt-3 text-xs text-chocolate-500">Tâches répétitives réduites jusqu'à 50% grâce à la délégation aux artisans (dossiers, disponibilités, documents) et, demain, aux boulangeries qui pourront directement choisir leurs profils favoris. Les meilleurs artisans sont naturellement attirés par une plateforme qui valorise leur expertise et leur visibilité.</p>
           </div>
           <div class="card h-full">
             <h3 class="font-semibold text-lg mb-3">2. Marque magnifiée</h3>
@@ -126,7 +126,7 @@
         </p>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
           <div class="card shadow-sm text-center">
-            <p class="text-3xl font-bold text-primary-600">-45%</p>
+            <p class="text-3xl font-bold text-primary-600">-50%</p>
             <p class="text-sm text-chocolate-500">Temps administratif économisé (dossiers artisans, relances)</p>
           </div>
           <div class="card shadow-sm text-center">
