@@ -101,6 +101,13 @@ const closeSnackbar = () => {
               Pourquoi Choukette ?
             </RouterLink>
             <RouterLink 
+              to="/blog" 
+              class="text-chocolate-600 hover:text-primary-600 font-medium transition-colors"
+              active-class="text-primary-600"
+            >
+              Blog
+            </RouterLink>
+            <RouterLink 
               to="/missions" 
               class="text-chocolate-600 hover:text-primary-600 font-medium transition-colors"
               active-class="text-primary-600"
@@ -215,6 +222,14 @@ const closeSnackbar = () => {
               active-class="text-primary-600"
             >
               ❓ Pourquoi Choukette ?
+            </RouterLink>
+            <RouterLink 
+              to="/blog" 
+              @click="closeMobileMenu"
+              class="block text-chocolate-600 hover:text-primary-600 font-medium transition-colors py-2"
+              active-class="text-primary-600"
+            >
+              📝 Blog
             </RouterLink>
             <RouterLink 
               to="/professionnels" 

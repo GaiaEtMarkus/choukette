@@ -72,6 +72,16 @@ const router = createRouter({
       name: 'why-choukette',
       component: () => import('@/views/WhyChouketteView.vue'),
     },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: () => import('@/views/BlogView.vue'),
+    },
+    {
+      path: '/blog/:id',
+      name: 'blog-detail',
+      component: () => import('@/views/BlogDetailView.vue'),
+    },
   ],
 })
 

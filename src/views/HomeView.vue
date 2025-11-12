@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useBlogStore } from '@/stores/blog'
+
+const blogStore = useBlogStore()
 
 // Animation numbers counter
 const stats = ref([
@@ -32,6 +35,15 @@ const features = ref([
     icon: '👥'
   }
 ])
+
+const latestBlogPost = computed(() => blogStore.latestPost)
+
+onMounted(() => {
+  // S'assurer que les posts sont générés
+  if (blogStore.posts.length === 0) {
+    blogStore.generateMockPosts()
+  }
+})
 </script>
 
 <template>
@@ -239,6 +251,102 @@ const features = ref([
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dernier article du blog -->
+    <section v-if="latestBlogPost" class="py-20 bg-white">
+      <div class="container-section">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-display font-bold text-chocolate-800 mb-4">
+            Dernier article du blog
+          </h2>
+          <p class="text-lg text-chocolate-600 max-w-2xl mx-auto">
+            Découvrez nos conseils, techniques et actualités pour les professionnels de la boulangerie
+          </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <article class="card hover:shadow-xl transition-shadow">
+            <RouterLink :to="`/blog/${latestBlogPost.id}`" class="block">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Image -->
+                <div class="relative h-64 md:h-full rounded-lg overflow-hidden">
+                  <img
+                    :src="latestBlogPost.imageUrl"
+                    :alt="latestBlogPost.title"
+                    class="w-full h-full object-cover"
+                  />
+                  <div class="absolute top-4 left-4">
+                    <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-chocolate-800">
+                      {{ blogStore.categories.find(c => c.id === latestBlogPost.category)?.icon }}
+                      {{ blogStore.categories.find(c => c.id === latestBlogPost.category)?.label }}
+                    </span>
+                  </div>
+                  <div v-if="latestBlogPost.featured" class="absolute top-4 right-4">
+                    <span class="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-semibold">
+                      ⭐ À la une
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Contenu -->
+                <div class="flex flex-col justify-center space-y-4">
+                  <div>
+                    <h3 class="text-2xl font-display font-bold text-chocolate-800 mb-3">
+                      {{ latestBlogPost.title }}
+                    </h3>
+                    <p class="text-chocolate-600 leading-relaxed">
+                      {{ latestBlogPost.excerpt }}
+                    </p>
+                  </div>
+
+                  <!-- Meta -->
+                  <div class="flex items-center gap-4 text-sm text-chocolate-500 pt-4 border-t border-chocolate-200">
+                    <div class="flex items-center gap-2">
+                      <img
+                        :src="latestBlogPost.authorAvatar || 'https://i.pravatar.cc/150?img=1'"
+                        :alt="latestBlogPost.author"
+                        class="w-6 h-6 rounded-full object-cover"
+                      />
+                      <span>{{ latestBlogPost.author }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {{ latestBlogPost.readTime }} min
+                    </div>
+                    <div v-if="latestBlogPost.views" class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      {{ latestBlogPost.views }}
+                    </div>
+                  </div>
+
+                  <!-- CTA -->
+                  <div class="pt-2">
+                    <span class="text-primary-600 font-semibold hover:text-primary-700 transition-colors inline-flex items-center gap-2">
+                      Lire l'article complet
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </RouterLink>
+          </article>
+
+          <!-- CTA vers le blog -->
+          <div class="text-center mt-8">
+            <RouterLink to="/blog" class="btn-primary btn-lg">
+              Voir tous les articles du blog
+            </RouterLink>
           </div>
         </div>
       </div>
